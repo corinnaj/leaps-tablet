@@ -1,5 +1,8 @@
 body {
   margin: 0;
+  height: 100vh;
+  overflow: hidden;
+  background: #000;
 }
 
 button {
@@ -67,6 +70,8 @@ a {
   -moz-user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
+
+  width: 100%;
 }
 
 #html-layer {

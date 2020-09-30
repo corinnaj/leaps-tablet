@@ -1,0 +1,94 @@
+.square {
+    border-color: #000;
+    border-style: solid;
+    border-width: 1px;
+    width: 20px;
+    height: 50px;
+}
+
+#selected {
+    background-color: #fff!important;
+    border-color: #fff;
+    border-style: solid;
+    border-width: 1px;
+    width: 20px;
+    height: 55px;
+    position: relative;
+}
+#selected:after {
+    position: absolute;
+    content: "You";
+    bottom: -20px;
+    left: -10px;
+    color: #fff;
+    font-size: 14px;
+    text-align: center;
+}
+
+.wrapper, .squares {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    z-index: 100;
+    width: 960px;
+}
+
+.wrapper {
+    top: -120px;
+}
+
+.squares {
+    top: -80px;
+}
+
+.threshold {
+    background: #fff;
+    width: 20px;
+    height: 80px;
+    position: relative;
+}
+.threshold:before {
+    content: "You must be above this line to receive a bonus payment";
+    position: absolute;
+    right: 15px;
+    color: #fff;
+    width: 500px;
+    font-size: 14px;
+    text-align: right;
+    bottom: 0;
+}
+.threshold.right-side-text:before {
+    left: 15px;
+    right: none;
+    text-align: left;
+}
+
+#right {
+    position: relative;
+    width: 470px;
+}
+
+#middle {
+    position: relative;
+    width: 30px;
+}
+
+#left {
+    position: relative;
+    width: 448px;
+}
+
+#right p {
+    justify-content: start;
+}
+
+#left p {
+    justify-content: end;
+}
+
+.feedback-text {
+    display: flex;
+    position: relative;
+    top: 5px;
+    font-size: 14px;
+}

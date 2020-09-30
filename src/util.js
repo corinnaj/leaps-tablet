@@ -1,7 +1,7 @@
 import "../node_modules/url-search-params-polyfill/index.js";
 
 
-export function makeSprite(name) { 
+export function makeSprite(name) {
   return new PIXI.Sprite(app.loader.resources[name].texture);
 }
 
@@ -12,7 +12,7 @@ export function clamp(x, min, max) {
 export function distanceBetween(a, b) {
   let x = a.x - b.x;
   let y = a.y - b.y;
-  return Math.sqrt(x*x + y*y);
+  return Math.sqrt(x * x + y * y);
 }
 
 export function lerp(a, b, p) {
@@ -23,19 +23,19 @@ export function lerp(a, b, p) {
 
 export function add(...points) {
   const r = new PIXI.Point();
-  for(let p of points) {
+  for (let p of points) {
     r.x += p.x;
     r.y += p.y;
-  } 
+  }
   return r;
 }
 
 export function subtract(...points) {
   const r = new PIXI.Point(points[0].x, points[0].y);
-  for(let i = 1; i < points.length; i++) {
+  for (let i = 1; i < points.length; i++) {
     r.x -= points[i].x;
     r.y -= points[i].y;
-  } 
+  }
   return r;
 }
 
@@ -57,25 +57,25 @@ export function round(p) {
 
 export function min(...points) {
   const r = new PIXI.Point(Infinity, Infinity);
-  for(let p of points) {
+  for (let p of points) {
     r.x = Math.min(p.x, r.x);
     r.y = Math.min(p.y, r.y);
-  } 
+  }
   return r;
 }
 
 export function max(...points) {
   const r = new PIXI.Point(-Infinity, -Infinity);
-  for(let p of points) {
+  for (let p of points) {
     r.x = Math.max(p.x, r.x);
     r.y = Math.max(p.y, r.y);
-  } 
+  }
   return r;
 }
 
 export function average(...points) {
   var sum = new PIXI.Point();
-  for(let point of points) sum = add(sum, point);
+  for (let point of points) sum = add(sum, point);
   return divide(sum, points.length);
 }
 
@@ -86,26 +86,26 @@ export function moveTowards(a, b, speed) {
 
 // Test containment using isEqual
 export function contains(list, p) {
-  for(let x of list) {
-    if(_.isEqual(x, p)) return true;
+  for (let x of list) {
+    if (_.isEqual(x, p)) return true;
   }
   return false;
-} 
+}
 
 // Test containment using isEqual
 export function indexOf(list, p) {
-  for(let i = 0; i < list.length; i++) {
-    if(_.isEqual(list[i], p)) return i;
+  for (let i = 0; i < list.length; i++) {
+    if (_.isEqual(list[i], p)) return i;
   }
   return -1;
-} 
+}
 
 // Find unique elements using isEqual
 export function uniq(array) {
   let results = [];
   let seen = [];
   array.forEach((value, index) => {
-    if(!contains(seen, value)) {
+    if (!contains(seen, value)) {
       seen.push(value)
       results.push(array[index])
     }
@@ -122,19 +122,19 @@ export function difference(array) {
 // Uses contains()
 export function removeFromArray(array, value) {
   let ret = [];
-  for(let element of array) if(!_.isEqual(element, value)) ret.push(element);
+  for (let element of array) if (!_.isEqual(element, value)) ret.push(element);
   return ret;
 }
 
-export function distance(a, b) {
+export function distance(a, b) {
   const x = a.x - b.x;
   const y = a.y - b.y;
-  return Math.sqrt(x*x + y*y);
+  return Math.sqrt(x * x + y * y);
 }
 
 export function cloneData(o) {
   return JSON.parse(JSON.stringify(o));
-} 
+}
 
 export function lerpColor(start, end, fraction) {
   const r = ((end & 0xff0000) >> 16) - ((start & 0xff0000) >> 16);
@@ -153,19 +153,23 @@ export function toFixedFloor(x, decimalPlaces) {
 }
 
 export function resizeGame(app) {
+  const feedbackHeight = 80;
   const parentSize = new PIXI.Point(window.innerWidth, window.innerHeight);
-  const scale = toFixedFloor(Math.min(parentSize.x / app.renderer.width, parentSize.y / app.renderer.height), 2);
+  const scale = Math.min(parentSize.x / app.renderer.width, parentSize.y / (app.renderer.height + feedbackHeight));
 
-  const newSize = new PIXI.Point(scale * app.renderer.width, scale * app.renderer.height);
+  const newSize = new PIXI.Point(scale * app.renderer.width, scale * (app.renderer.height + feedbackHeight));
   const remainingSpace = new PIXI.Point(parentSize.x - newSize.x, parentSize.y - newSize.y);
 
   console.log("setting scale to", scale);
 
-  const css = `scale(${scale}) translate(${(remainingSpace.x / 2).toFixed(2)}px, ${(remainingSpace.y / 2).toFixed(2)}px)`;
+  const css = `translate(${(remainingSpace.x / 2).toFixed(2)}px, ${(remainingSpace.y / 2).toFixed(2)}px) scale(${scale}) `;
   const element = document.getElementById("game-container");
-  for(const prop of ["transform", "webkitTransform", "msTransform"]) {
+  for (const prop of ["transform", "webkitTransform", "msTransform"]) {
     document.getElementById("game-container").style[prop] = css;
   }
+
+  document.getElementById("game-container").style.marginTop = scale * feedbackHeight + 'px';
+
 }
 
 export function getStartingScene(defaultScene) {
@@ -174,7 +178,7 @@ export function getStartingScene(defaultScene) {
 }
 
 export function provideNextScene(sceneTransitions, currentScene, requestedTransition) {
-  if(currentScene in sceneTransitions) return sceneTransitions[currentScene];
+  if (currentScene in sceneTransitions) return sceneTransitions[currentScene];
 
   console.error("No transition from", currentScene, "with transition", requestedTransition);
   return null;
@@ -191,33 +195,33 @@ export function centerContainer(container, centerPos) {
 }
 
 export function supportsFullscreen(element) {
-  return !!(element.requestFullscreen 
-    || element.mozRequestFullScreen 
-    || element.webkitRequestFullscreen 
+  return !!(element.requestFullscreen
+    || element.mozRequestFullScreen
+    || element.webkitRequestFullscreen
     || element.msRequestFullscreen);
 }
 
 export function requestFullscreen(element) {
-  if(element.requestFullscreen) {
+  if (element.requestFullscreen) {
     element.requestFullscreen();
-  } else if(element.mozRequestFullScreen) {
+  } else if (element.mozRequestFullScreen) {
     element.mozRequestFullScreen();
-  } else if(element.webkitRequestFullscreen) {
+  } else if (element.webkitRequestFullscreen) {
     element.webkitRequestFullscreen();
-  } else if(element.msRequestFullscreen) {
+  } else if (element.msRequestFullscreen) {
     element.msRequestFullscreen();
   }
 }
 
 export function exitFullscreen() {
-  if(document.exitFullscreen) document.exitFullscreen();
-  else if(document.webkitExitFullscreen) document.webkitExitFullscreen();
-  else if(document.mozCancelFullScreen) document.mozCancelFullScreen();
-  else if(document.msExitFullscreen) document.msExitFullscreen();
-} 
+  if (document.exitFullscreen) document.exitFullscreen();
+  else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+  else if (document.mozCancelFullScreen) document.mozCancelFullScreen();
+  else if (document.msExitFullscreen) document.msExitFullscreen();
+}
 
 export function inFullscreen() {
-  return document.fullscreenElement 
+  return document.fullscreenElement
     || document.webkitFullscreenElement
     || document.mozFullScreenElement
     || document.msFullScreenElement;
@@ -226,9 +230,9 @@ export function inFullscreen() {
 
 
 export class Entity extends PIXI.utils.EventEmitter {
-  setup() {}
-  update(timeSinceStart, timeScale) {}
-  teardown() {}
+  setup() { }
+  update(timeSinceStart, timeScale) { }
+  teardown() { }
   requestedTransition(timeSinceStart) { return null; } // Provide string transition name, such as "next"
 }
 
@@ -243,13 +247,13 @@ export class StateMachine extends Entity {
   }
 
   changeState(timeSinceStart, nextStateName) {
-    if(this.state) this.state.teardown();
+    if (this.state) this.state.teardown();
 
     this.stateName = nextStateName;
 
-    if(nextStateName in this.states) {
+    if (nextStateName in this.states) {
       this.state = this.states[nextStateName];
-      this.state.setup();      
+      this.state.setup();
     } else {
       console.warn("Cannot find state", nextStateName);
       this.state = null;
@@ -263,23 +267,23 @@ export class StateMachine extends Entity {
   }
 
   update(timeSinceStart, timeScale) {
-    if(!this.state) return;
+    if (!this.state) return;
 
     const timeSinceStateStart = timeSinceStart - this.sceneStartedAt;
     this.state.update(timeSinceStateStart, timeScale);
 
     const requestedTransition = this.state.requestedTransition(timeSinceStateStart);
-    if(requestedTransition != null) {
+    if (requestedTransition != null) {
       const nextStateName = this.transitions[this.stateName][requestedTransition];
-      if(nextStateName != null) this.changeState(timeSinceStart, nextStateName)
+      if (nextStateName != null) this.changeState(timeSinceStart, nextStateName)
     }
   }
 
   teardown() {
-    if(this.state) this.state.teardown();
+    if (this.state) this.state.teardown();
   }
 
-  requestedTransition(timeSinceStart) { 
+  requestedTransition(timeSinceStart) {
     return this.stateName == this.endingState ? "next" : null;
   }
 }
@@ -292,24 +296,24 @@ export class ParallelEntities extends Entity {
   }
 
   setup() {
-    for(const entity of this.entities) {
+    for (const entity of this.entities) {
       entity.setup();
-    } 
+    }
   }
 
   update(timeSinceStart, timeScale) {
-    for(const entity of this.entities) {
+    for (const entity of this.entities) {
       entity.update(timeSinceStart, timeScale);
     }
-  } 
-
-  teardown() {
-    for(const entity of this.entities) {
-      entity.teardown();
-    }     
   }
 
-  requestedTransition(timeSinceStart) { 
+  teardown() {
+    for (const entity of this.entities) {
+      entity.teardown();
+    }
+  }
+
+  requestedTransition(timeSinceStart) {
     return this.entities[0].requestedTransition(timeSinceStart);
   }
 }
