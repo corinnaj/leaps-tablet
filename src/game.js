@@ -2,6 +2,7 @@ import "../node_modules/babel-polyfill/dist/polyfill.js";
 import * as util from "./util.js";
 import "../node_modules/url-search-params-polyfill/index.js";
 
+import './feedbackbar.js'
 
 const EPSILON = 0.001;
 const BLOCK_WIDTH = 50;

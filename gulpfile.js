@@ -45,6 +45,7 @@ function copyBuildAssets() {
     './deps/*',
     './images/*',
     './game.css',
+    './feedback/feedbackbar.css',
     './fonts/css/*',
     './fonts/font/*',
   ], { base: '.'})
@@ -66,6 +67,7 @@ function copyDistAssets() {
   return gulp.src([
     './build/images/*',
     './build/game.css',
+    './build/feedback/feedbackbar.css',
     './build/index.html',
     './build/fonts/**',
   ], { base: './build'})

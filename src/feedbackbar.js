@@ -35,13 +35,13 @@ function colorGradient(fadeFraction, rgbColor1, rgbColor2, rgbColor3) {
 
 function generateSquares() {
   var squares = document.getElementById("squares");
-  for (i = 0; i < 50; i++) {
+  for (let i = 0; i < 50; i++) {
     createSquare(i);
   }
   var threshold = document.createElement('div');
   threshold.classList.add('threshold');
   squares.appendChild(threshold);
-  for (i = 50; i < 100; i++) {
+  for (let i = 50; i < 100; i++) {
     createSquare(i);
   }
 
