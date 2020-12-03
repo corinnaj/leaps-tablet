@@ -23,10 +23,12 @@
           <div id="intro-gui">
             <h1>Welcome to the game of shifting shapes</h1>
             <p>Your goal is to discover interesting and beautiful shapes.</p>
+            <!---
             <p>To continue, please enter the unique ID given to you.</p>
             <br>
             <p><input id="user-provided-id"></p>
-            <br><button id="done-intro">Continue</button></p>
+            --->
+            <br><button id="done-intro">Start Intro</button></p>
           </div>
           <div id="training-gui">
             <h1>Training Session</h1>
@@ -136,7 +138,14 @@
             </div>
 
             <div id="thanks-block">
-              <h1 class="vertical-align">Thanks for playing!</h1>
+              <br>
+              <br>
+              <h1> Thanks for playing!</h1>
+              <p>Copy this ID to MTurk to continue: </p>
+              <br>
+              <p id="mturk-code"> </p>
+              <br>
+              <button id="copy-code">Copy Code</button>
             </div>
           </div>
         </div>

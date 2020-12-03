@@ -75,9 +75,6 @@ function getNextStepInRange() {
     else selected -= 1
   } else {
     //else we trend towards the end value
-    console.log(Math.sign(selected - condEndAreaEnd));
-    console.log(selected);
-    console.log(condEndAreaEnd);
     if (Math.random() < 0.7) selected += Math.sign(condEndAreaEnd - selected)
     else selected += Math.sign(selected - condEndAreaEnd)
   }

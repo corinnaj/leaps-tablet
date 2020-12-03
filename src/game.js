@@ -127,10 +127,9 @@ class IntroScene extends util.Entity {
   setup() {
     document.getElementById("intro-gui").style.display = "block";
 
-    document.getElementById("user-provided-id").addEventListener("keyup", this.onSetUserProvidedId.bind(this));
 
     this.done = false;
-    document.getElementById("done-intro").disabled = true;
+    //document.getElementById("done-intro").disabled = true;
     document.getElementById("done-intro").addEventListener("click", this.onDone.bind(this));
   }
 
@@ -140,17 +139,9 @@ class IntroScene extends util.Entity {
 
   requestedTransition(timeSinceStart) { return this.done ? "next" : null; }
 
-  onSetUserProvidedId(e) {
-    document.getElementById("done-intro").disabled = (document.getElementById("user-provided-id").value.length === 0);
-
-    // If enter key pressed
-    if (e.keyCode === 13 && !document.getElementById("done-intro").disabled) {
-      this.onDone();
-    }
-  }
-
   onDone() {
-    playerData.customData.userProvidedId = document.getElementById("user-provided-id").value;
+    //playerData.customData.userProvidedId = document.getElementById("user-provided-id").value;
+    playerData.customData.userProvidedId = new URL(window.location.href).searchParams.get("id") ?? "9999999999";
     redmetricsConnection.updatePlayer(playerData);
 
     this.done = true;
@@ -708,7 +699,9 @@ class ResultsScene extends util.Entity {
     document.getElementById("results-gui").style.display = "block";
 
     if (!showResults) {
+      document.getElementById("copy-code").addEventListener("click", this.copyCode.bind(this));
       document.getElementById("results-block").style.display = "none";
+      document.getElementById("mturk-code").innerText = 'HVUGECTWBBA-' + redmetricsConnection.playerId;
     } else {
       document.getElementById("thanks-block").style.display = "none";
 
@@ -754,6 +747,17 @@ class ResultsScene extends util.Entity {
         document.getElementById("followup-link-container").style.display = "none";
       }
     }
+  }
+
+  copyCode() {
+    const el = document.createElement('textarea');
+    el.value = 'HVUGECTWBBA-' + redmetricsConnection.playerId
+    el.setAttribute('readonly', '');
+    el.style.position = 'absolute';
+    el.style.left = '-9999px';
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand("copy");
   }
 
   teardown() {
