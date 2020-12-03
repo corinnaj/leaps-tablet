@@ -141,8 +141,11 @@ class IntroScene extends util.Entity {
 
   onDone() {
     //playerData.customData.userProvidedId = document.getElementById("user-provided-id").value;
-    playerData.customData.userProvidedId = new URL(window.location.href).searchParams.get("id") ?? "9999999999";
-    redmetricsConnection.updatePlayer(playerData);
+
+    let newId = new URLSearchParams(window.location.search).get("id")
+    if (newId == null) newId = "99999999"
+    playerData.customData.userProvidedId = newId
+    redmetricsConnection.updatePlayer(playerData)
 
     this.done = true;
   }

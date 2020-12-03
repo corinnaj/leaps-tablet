@@ -1,4 +1,5 @@
-const condition = new URL(window.location.href).searchParams.get("condition") ?? 0;
+let condition = new URL(window.location.href).searchParams.get("condition");
+if (condition == null) condition = 0;
 const first = [49, 50, 50];
 const endAreaStart = [25, 55, 80];
 const endAreaEnd = [10, 65, 95];
