@@ -1,13 +1,17 @@
-const condition = 0;
-const first = [15, 55, 80];
-const last = [30, 70, 95];
+const condition = new URL(window.location.href).searchParams.get("condition") ?? 0;
+const first = [49, 50, 50];
+const endAreaStart = [25, 55, 80];
+const endAreaEnd = [10, 65, 95];
+
+const condEndAreaStart = endAreaStart[condition]
+const condEndAreaEnd = endAreaEnd[condition]
 
 const color1 = { red: 255, green: 0, blue: 0 };
 const color2 = { red: 255, green: 255, blue: 0 };
 const color3 = { red: 19, green: 233, blue: 19 };
-
-var selected = first[condition] + Math.floor(Math.random() * (last[condition] - first[condition]));
-var mySquares = [];
+let selected = first[condition];
+let mySquares = [];
+let interval;
 
 function colorGradient(fadeFraction, rgbColor1, rgbColor2, rgbColor3) {
   var color1 = rgbColor1;
@@ -58,9 +62,30 @@ function createSquare(i) {
 }
 
 function getNextStepInRange() {
-  if (Math.random() < 0.5) { selected += 1; }
-  else { selected -= 1; }
-  return Math.max(Math.min(selected, last[condition]), first[condition]);
+  //if we are outside area move towards it
+  if (selected < Math.min(condEndAreaStart, condEndAreaEnd) || selected > Math.max(condEndAreaStart, condEndAreaEnd)) {
+    if (selected < condEndAreaStart) selected += 1
+    else selected -= 1
+    return selected
+  }
+
+  //if we are in regular, move up and down randomly
+  if (condition == 1) {
+    if (Math.random() < 0.5) selected += 1
+    else selected -= 1
+  } else {
+    //else we trend towards the end value
+    console.log(Math.sign(selected - condEndAreaEnd));
+    console.log(selected);
+    console.log(condEndAreaEnd);
+    if (Math.random() < 0.7) selected += Math.sign(condEndAreaEnd - selected)
+    else selected += Math.sign(selected - condEndAreaEnd)
+  }
+
+  //make sure we cannot leave safe area
+  if (selected === condEndAreaEnd || selected === condEndAreaStart)
+    selected += Math.sign(condEndAreaStart - condEndAreaEnd)
+  return selected
 }
 
 function chooseSelected() {
@@ -69,8 +94,12 @@ function chooseSelected() {
   mySquares[selected].id = 'selected';
 }
 
-generateSquares();
-chooseSelected();
-setInterval(function () {
+window.stopFeedbackBar = function () {
+  clearInterval(interval)
+}
+
+window.showFeedbackBar = function () {
+  generateSquares();
   chooseSelected();
-}, 3000);
+  interval = setInterval(chooseSelected, 3000)
+}

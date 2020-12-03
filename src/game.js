@@ -20,12 +20,12 @@ function gridPosToPixelPos(gridPos) {
 
 function pixelPosToGridPos(pixelPos) {
   return util.round(util.divide(pixelPos, BLOCK_WIDTH));
-}  
+}
 
 function drawBlock(graphics, fillColor) {
   graphics.beginFill(fillColor);
   graphics.lineStyle(4, 0x000000, 1);
-  graphics.drawRect(-BLOCK_WIDTH/2, -BLOCK_WIDTH/2, BLOCK_WIDTH, BLOCK_WIDTH);
+  graphics.drawRect(-BLOCK_WIDTH / 2, -BLOCK_WIDTH / 2, BLOCK_WIDTH, BLOCK_WIDTH);
   graphics.endFill();
 }
 
@@ -38,7 +38,7 @@ function makeBlockShape(gridPos) {
 }
 
 function convertShapeToArray(shape) {
-  return shape.map(({x, y}) => [x, y]);
+  return shape.map(({ x, y }) => [x, y]);
 }
 
 function pointToArray(p) {
@@ -46,11 +46,11 @@ function pointToArray(p) {
 }
 
 function calculateSearchScore(shapeCount, timePlayed) {
-  return Math.min(2 * ((1/88) * shapeCount * (720000 / timePlayed) - 0.5), 1);
+  return Math.min(2 * ((1 / 88) * shapeCount * (720000 / timePlayed) - 0.5), 1);
 }
 
 function toggleFullscreen() {
-  if(util.inFullscreen()) {
+  if (util.inFullscreen()) {
     util.exitFullscreen();
     showFullscreenIcon(true);
   } else {
@@ -60,7 +60,7 @@ function toggleFullscreen() {
 }
 
 function showFullscreenIcon(full) {
-  if(full) {
+  if (full) {
     document.getElementById("fullscreen-button-small").style.display = "none";
     document.getElementById("fullscreen-button-full").style.display = "block";
   } else {
@@ -70,8 +70,8 @@ function showFullscreenIcon(full) {
 }
 
 function loadProgressHandler(loader, resource) {
-  console.log("loading: " + resource.url); 
-  console.log("progress: " + loader.progress + "%"); 
+  console.log("loading: " + resource.url);
+  console.log("progress: " + loader.progress + "%");
 }
 
 function setup() {
@@ -84,7 +84,7 @@ function setup() {
     type: "start"
   });
 
-  if(util.supportsFullscreen(document.getElementById("game-parent"))) {
+  if (util.supportsFullscreen(document.getElementById("game-parent"))) {
     document.getElementById("fullscreen-button").addEventListener("click", toggleFullscreen);
     showFullscreenIcon(true);
   } else {
@@ -96,9 +96,9 @@ function setup() {
 }
 
 function changeScene(newSceneName) {
-  if(currentScene) currentScene.teardown();
+  if (currentScene) currentScene.teardown();
 
-  currentSceneName = newSceneName;  
+  currentSceneName = newSceneName;
   currentScene = new scenes[currentSceneName];
 
   sceneStartedAt = Date.now();
@@ -110,15 +110,14 @@ function changeScene(newSceneName) {
   });
 }
 
-function update(timeScale)
-{
+function update(timeScale) {
   const timeSinceStart = Date.now() - sceneStartedAt;
   currentScene.update(timeSinceStart, timeScale);
 
   const requestedTransition = currentScene.requestedTransition(timeSinceStart);
-  if(requestedTransition != null) {
-      const nextSceneName = util.provideNextScene(sceneTransitions, currentSceneName, requestedTransition);
-      if(nextSceneName != null) changeScene(nextSceneName);
+  if (requestedTransition != null) {
+    const nextSceneName = util.provideNextScene(sceneTransitions, currentSceneName, requestedTransition);
+    if (nextSceneName != null) changeScene(nextSceneName);
   }
   app.renderer.render(app.stage);
 }
@@ -137,7 +136,7 @@ class IntroScene extends util.Entity {
 
   teardown() {
     document.getElementById("intro-gui").style.display = "none";
-  }  
+  }
 
   requestedTransition(timeSinceStart) { return this.done ? "next" : null; }
 
@@ -145,9 +144,9 @@ class IntroScene extends util.Entity {
     document.getElementById("done-intro").disabled = (document.getElementById("user-provided-id").value.length === 0);
 
     // If enter key pressed
-    if(e.keyCode === 13 && !document.getElementById("done-intro").disabled) {
+    if (e.keyCode === 13 && !document.getElementById("done-intro").disabled) {
       this.onDone();
-    } 
+    }
   }
 
   onDone() {
@@ -177,7 +176,12 @@ class TrainingScene extends util.Entity {
     document.getElementById("training-gui").style.display = "block";
     document.getElementById("done-training-1").addEventListener("click", this.onDonePart1.bind(this));
     document.getElementById("done-training-2").addEventListener("click", this.onDonePart2.bind(this));
-    document.getElementById("done-training-4").addEventListener("click", e => this.done = true);
+    document.getElementById("done-training-4").addEventListener("click", this.start.bind(this));
+  }
+
+  start() {
+    this.done = true;
+    window.showFeedbackBar();
   }
 
   update(timeSinceStart) {
@@ -196,7 +200,7 @@ class TrainingScene extends util.Entity {
   requestedTransition(timeSinceStart) { return this.done ? "next" : null; }
 
   onDroppedBlock() {
-    if(this.didDropBlock) return;
+    if (this.didDropBlock) return;
 
     this.didDropBlock = true;
     this.blockScene.highlightMovableBlocks();
@@ -259,7 +263,7 @@ class BlockScene extends util.Entity {
 
     // Make blocks
     this.blockGrid = [];
-    for(let i = 0; i < 10; i++) {
+    for (let i = 0; i < 10; i++) {
       const gridPos = new PIXI.Point(i, 0);
       this.blockGrid.push(gridPos);
 
@@ -302,14 +306,14 @@ class BlockScene extends util.Entity {
   }
 
   update(timeSinceStart) {
-    if(this.timesUp) return;
+    if (this.timesUp) return;
 
 
-    if(timeSinceStart > MAX_SEARCH_TIME) {
+    if (timeSinceStart > MAX_SEARCH_TIME) {
       this.timesUp = true;
 
       document.getElementById("add-shape").disabled = true;
-      if(galleryShapes.length < 5) {
+      if (galleryShapes.length < 5) {
         document.getElementById("stuck-message").style.display = "block";
         document.getElementById("done-adding").disabled = true;
       } else {
@@ -319,14 +323,13 @@ class BlockScene extends util.Entity {
     }
 
     // Animate highlighted blocks
-    for(const block of this.highlightedBlocks) {
-      const color = util.cyclicLerpColor(BLOCK_COLOR, HIGHLIGHTED_BLOCK_COLOR, 
+    for (const block of this.highlightedBlocks) {
+      const color = util.cyclicLerpColor(BLOCK_COLOR, HIGHLIGHTED_BLOCK_COLOR,
         (timeSinceStart % DRAG_HIGHLIGHT_PERIOD) / DRAG_HIGHLIGHT_PERIOD);
       drawBlock(block, color);
     }
 
-    if(util.distanceBetween(this.targetBlockContainerPosition, this.blocksContainer.position) > 1)
-    {
+    if (util.distanceBetween(this.targetBlockContainerPosition, this.blocksContainer.position) > 1) {
       this.blocksContainer.position = util.lerp(this.blocksContainer.position, this.targetBlockContainerPosition, 0.5);
     }
   }
@@ -344,16 +347,16 @@ class BlockScene extends util.Entity {
   requestedTransition(timeSinceStart) { return this.done ? "next" : null; }
 
   highlightMovableBlocks() {
-    for(const blockGraphic of this.blocksContainer.children) {
-      if(this.canMoveBlock(pixelPosToGridPos(blockGraphic.position))) {
+    for (const blockGraphic of this.blocksContainer.children) {
+      if (this.canMoveBlock(pixelPosToGridPos(blockGraphic.position))) {
         this.highlightedBlocks.add(blockGraphic);
       }
     }
   }
 
   unhighlightMovableBlocks() {
-    for(const blockGraphic of this.blocksContainer.children) {
-      if(this.canMoveBlock(pixelPosToGridPos(blockGraphic.position))) {
+    for (const blockGraphic of this.blocksContainer.children) {
+      if (this.canMoveBlock(pixelPosToGridPos(blockGraphic.position))) {
         this.unhighlightBlock(blockGraphic);
       }
     }
@@ -365,8 +368,8 @@ class BlockScene extends util.Entity {
   }
 
   onPointerDown(e) {
-    if(this.draggingBlock) return; // Don't allow multiple drags
-    if(this.timesUp) return; // Don't allow drags when time is up
+    if (this.draggingBlock) return; // Don't allow multiple drags
+    if (this.timesUp) return; // Don't allow drags when time is up
 
 
     this.draggingBlock = e.currentTarget;
@@ -387,7 +390,7 @@ class BlockScene extends util.Entity {
   }
 
   onPointerUp(e) {
-    if(!this.draggingBlock) return;
+    if (!this.draggingBlock) return;
 
     this.dropBlock(this.draggingBlock, this.draggingBlock.position);
 
@@ -407,8 +410,8 @@ class BlockScene extends util.Entity {
   }
 
   onPointerMove(e) {
-    if(!this.draggingBlock) return;
-    if(e.data.pointerId !== this.draggingPointerId) return;
+    if (!this.draggingBlock) return;
+    if (e.data.pointerId !== this.draggingPointerId) return;
 
 
     this.draggingBlock.position = util.subtract(e.data.getLocalPosition(app.stage), this.blocksContainer.position);
@@ -429,8 +432,8 @@ class BlockScene extends util.Entity {
   }
 
   updateBlockInteractivity() {
-    for(const blockGraphic of this.blocksContainer.children) {
-      if(this.canMoveBlock(pixelPosToGridPos(blockGraphic.position))) {
+    for (const blockGraphic of this.blocksContainer.children) {
+      if (this.canMoveBlock(pixelPosToGridPos(blockGraphic.position))) {
         blockGraphic.interactive = true;
       } else {
         blockGraphic.interactive = false;
@@ -444,7 +447,7 @@ class BlockScene extends util.Entity {
 
     const freeGridPositions = this.findFreeGridPositions();
     const closestGridPos = _.min(freeGridPositions, freePos => util.distance(gridPos, freePos));
-    
+
     block.position = gridPosToPixelPos(closestGridPos);
     this.blockGrid.push(closestGridPos);
 
@@ -462,7 +465,7 @@ class BlockScene extends util.Entity {
 
   findFreeGridPositions() {
     var ret = [];
-    for(let b of this.blockGrid) {
+    for (let b of this.blockGrid) {
       ret.push(new PIXI.Point(b.x - 1, b.y));
       ret.push(new PIXI.Point(b.x + 1, b.y));
       ret.push(new PIXI.Point(b.x, b.y - 1));
@@ -473,9 +476,9 @@ class BlockScene extends util.Entity {
   }
 
   blocksAreNeighbors(a, b) {
-    const x = Math.abs(a.x - b.x); 
-    const y = Math.abs(a.y - b.y); 
-    return x == 1 && y == 0 || x == 0 && y == 1; 
+    const x = Math.abs(a.x - b.x);
+    const y = Math.abs(a.y - b.y);
+    return x == 1 && y == 0 || x == 0 && y == 1;
   }
 
   makeAdjacencyList(blocks) {
@@ -485,8 +488,8 @@ class BlockScene extends util.Entity {
     for (let i = 0; i < blocks.length - 1; i++) {
       for (let j = i + 1; j < blocks.length; j++) {
         if (this.blocksAreNeighbors(blocks[i], blocks[j])) {
-            adjList[i].push(j);
-            adjList[j].push(i);
+          adjList[i].push(j);
+          adjList[j].push(i);
         }
       }
     }
@@ -517,10 +520,10 @@ class BlockScene extends util.Entity {
   }
 
   onAddShape() {
-    if(this.preventAddingShape) return;
-    if(this.timesUp) return; // Don't allow adding shape when time is up
-    if(!this.changedShape) return;
-    if(this.draggingBlock) return; // Can't add shape while dragging
+    if (this.preventAddingShape) return;
+    if (this.timesUp) return; // Don't allow adding shape when time is up
+    if (!this.changedShape) return;
+    if (this.draggingBlock) return; // Can't add shape while dragging
 
 
     const galleryShape = util.cloneData(this.blockGrid)
@@ -543,9 +546,9 @@ class BlockScene extends util.Entity {
   }
 
   onAttemptDone() {
-    if(this.timesUp || !allowEarlyExit) {
+    if (this.timesUp || !allowEarlyExit) {
       this.confirmDone();
-    } else if(galleryShapes.length < 5) { 
+    } else if (galleryShapes.length < 5) {
       document.getElementById("end-early-message").style.display = "block";
     } else {
       document.getElementById("modal-confirm-done").style.display = "block";
@@ -559,12 +562,13 @@ class BlockScene extends util.Entity {
   confirmDone() {
     this.done = true;
 
+    window.stopFeedbackBar();
     searchScore = calculateSearchScore()
   }
 
   updateGalleryShape(galleryShape) {
     this.galleryLayer.removeChildren();
-    for(let block of galleryShape)
+    for (let block of galleryShape)
       this.galleryLayer.addChild(makeBlockShape(block));
     util.centerContainer(this.galleryLayer, new PIXI.Point());
   }
@@ -587,13 +591,13 @@ class GalleryScene extends util.Entity {
     this.container.addChild(this.pages);
 
     let pageContainer;
-    for(let i = 0; i < galleryShapes.length; i++) {
+    for (let i = 0; i < galleryShapes.length; i++) {
       const page = Math.floor(i / ITEMS_PER_PAGE);
-      const row = Math.floor((i % ITEMS_PER_PAGE) / COLS); 
+      const row = Math.floor((i % ITEMS_PER_PAGE) / COLS);
       const col = Math.floor((i % ITEMS_PER_PAGE) % COLS);
 
       // Make new page if necessary
-      if(i % (ROWS * COLS) == 0) {
+      if (i % (ROWS * COLS) == 0) {
         pageContainer = new PIXI.Container();
         pageContainer.visible = false;
         this.pages.addChild(pageContainer);
@@ -617,7 +621,7 @@ class GalleryScene extends util.Entity {
       pageContainer.addChild(galleryParent);
 
       const galleryLayer = new PIXI.Container();
-      for(let block of galleryShapes[i])
+      for (let block of galleryShapes[i])
         galleryLayer.addChild(makeBlockShape(block));
       util.centerContainer(galleryLayer, new PIXI.Point());
       galleryParent.addChild(galleryLayer);
@@ -635,22 +639,22 @@ class GalleryScene extends util.Entity {
   }
 
   update(timeSinceStart) {
-    if(this.done) searchScore = calculateSearchScore(galleryShapes.length, timeSinceStart);
-  } 
+    if (this.done) searchScore = calculateSearchScore(galleryShapes.length, timeSinceStart);
+  }
 
   teardown() {
     sceneLayer.removeChild(this.container);
     document.getElementById("selection-gui").style.display = "none";
   }
-  
+
   requestedTransition(timeSinceStart) { return this.done ? "next" : null; }
 
   onToggleShape(shape, shapeIndex) {
     const isSelected = !_.contains(this.selectedIndexes, shapeIndex);
 
-    if(isSelected) this.selectedIndexes.push(shapeIndex);
-    else this.selectedIndexes = util.removeFromArray(this.selectedIndexes, shapeIndex); 
-    
+    if (isSelected) this.selectedIndexes.push(shapeIndex);
+    else this.selectedIndexes = util.removeFromArray(this.selectedIndexes, shapeIndex);
+
     shape.beginFill(isSelected ? 0x9B2526 : 0x333333);
     shape.drawRect(-40, -40, 80, 80);
     shape.endFill();
@@ -703,7 +707,7 @@ class ResultsScene extends util.Entity {
 
     document.getElementById("results-gui").style.display = "block";
 
-    if(!showResults) {
+    if (!showResults) {
       document.getElementById("results-block").style.display = "none";
     } else {
       document.getElementById("thanks-block").style.display = "none";
@@ -718,30 +722,30 @@ class ResultsScene extends util.Entity {
       ball.drawCircle(app.renderer.width / 2 + searchScore * 255, 120, 10);
       this.container.addChild(ball);
 
-      if(searchScore > 0) {
+      if (searchScore > 0) {
         document.getElementById("rapid-search-text").style.display = "block";
       } else {
         document.getElementById("focused-search-text").style.display = "block";
       }
 
       const searchScorePercent = Math.round(Math.abs(searchScore) * 100);
-      for(let el of document.getElementsByClassName("searchScorePercent")) {
+      for (let el of document.getElementsByClassName("searchScorePercent")) {
         el.innerText = searchScorePercent;
       }
 
-      document.getElementById("code").innerText = redmetricsConnection.playerId ? 
+      document.getElementById("code").innerText = redmetricsConnection.playerId ?
         redmetricsConnection.playerId.substr(-8) : "Unknown";
 
       // Setup followup link
-      if(searchParams.has("followupLink")) {
+      if (searchParams.has("followupLink")) {
         const expId = searchParams.get("expId") || searchParams.get("expID") || "";
         const userId = searchParams.get("userId") || searchParams.get("userID") || "";
         const metricsId = redmetricsConnection.playerId || "";
         const userProvidedId = playerData.customData.userProvidedId || "";
 
         var link = searchParams.get("followupLink");
-        if(!_.contains(link, "?")) link += "?";
-        link += "&IDExp=" + expId 
+        if (!_.contains(link, "?")) link += "?";
+        link += "&IDExp=" + expId
           + "&IDUser=" + userId
           + "&IDMetrics=" + metricsId
           + "&IDUserProvided=" + userProvidedId;
@@ -755,7 +759,7 @@ class ResultsScene extends util.Entity {
   teardown() {
     document.getElementById("results-gui").style.display = "none";
     sceneLayer.removeChild(this.container);
-  }  
+  }
 }
 
 
@@ -817,12 +821,12 @@ let playerData = {
   }
 };
 
-redmetricsConnection = redmetrics.prepareWriteConnection({ 
+redmetricsConnection = redmetrics.prepareWriteConnection({
   host: RED_METRICS_HOST,
   gameVersionId: RED_METRICS_GAME_VERSION,
   player: playerData
 });
-redmetricsConnection.connect().then(function() {
+redmetricsConnection.connect().then(function () {
   console.log("Connected to the RedMetrics server");
 });
 
