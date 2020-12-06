@@ -754,7 +754,7 @@ class ResultsScene extends util.Entity {
 
   copyCode() {
     const el = document.createElement('textarea');
-    el.value = 'HVUGECTWBBA-' + redmetricsConnection.playerId
+    el.value = 'HVUGECTWBBA-' + playerData.customData.userProvidedId;
     el.setAttribute('readonly', '');
     el.style.position = 'absolute';
     el.style.left = '-9999px';
