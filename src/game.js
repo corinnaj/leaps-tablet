@@ -704,7 +704,7 @@ class ResultsScene extends util.Entity {
     if (!showResults) {
       document.getElementById("copy-code").addEventListener("click", this.copyCode.bind(this));
       document.getElementById("results-block").style.display = "none";
-      document.getElementById("mturk-code").innerText = 'HVUGECTWBBA-' + redmetricsConnection.playerId;
+      document.getElementById("mturk-code").innerText = 'HVUGECTWBBA-' + playerData.customData.userProvidedId;
     } else {
       document.getElementById("thanks-block").style.display = "none";
 
