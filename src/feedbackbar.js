@@ -1,8 +1,8 @@
 let condition = new URL(window.location.href).searchParams.get("condition");
 if (condition == null) condition = 0;
-const first = [49, 50, 50];
-const endAreaStart = [25, 55, 80];
-const endAreaEnd = [10, 65, 95];
+const first = [490, 500, 500];
+const endAreaStart = [250, 550, 800];
+const endAreaEnd = [100, 650, 950];
 
 const condEndAreaStart = endAreaStart[condition]
 const condEndAreaEnd = endAreaEnd[condition]
@@ -40,13 +40,13 @@ function colorGradient(fadeFraction, rgbColor1, rgbColor2, rgbColor3) {
 
 function generateSquares() {
   var squares = document.getElementById("squares");
-  for (let i = 0; i < 50; i++) {
+  for (let i = 0; i < 500; i++) {
     createSquare(i);
   }
   var threshold = document.createElement('div');
   threshold.classList.add('threshold');
   squares.appendChild(threshold);
-  for (let i = 50; i < 100; i++) {
+  for (let i = 500; i < 1000; i++) {
     createSquare(i);
   }
 
@@ -57,7 +57,7 @@ function generateSquares() {
 function createSquare(i) {
   var square = document.createElement('div');
   square.classList.add('square');
-  square.style.backgroundColor = colorGradient(i / 100, color1, color2, color3);
+  square.style.backgroundColor = colorGradient(i / 1000, color1, color2, color3);
   squares.appendChild(square);
   mySquares = mySquares.concat([square]);
 }
@@ -99,5 +99,5 @@ window.stopFeedbackBar = function () {
 window.showFeedbackBar = function () {
   generateSquares();
   chooseSelected();
-  interval = setInterval(chooseSelected, 3000)
+  interval = setInterval(chooseSelected, 300)
 }
