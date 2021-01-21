@@ -296,7 +296,8 @@ class BlockScene extends util.Entity {
     // Don't allow player to leave early if allowEarlyExit is false
     const doneAddingButton = document.getElementById("done-adding");
     doneAddingButton.addEventListener("click", this.onAttemptDone);
-    doneAddingButton.disabled = !allowEarlyExit;
+    //doneAddingButton.disabled = !allowEarlyExit;
+    doneAddingButton.style.display = allowEarlyExit ? "block" : "none";
   }
 
   update(timeSinceStart) {
@@ -312,6 +313,7 @@ class BlockScene extends util.Entity {
         document.getElementById("done-adding").disabled = true;
       } else {
         document.getElementById("continue-message").style.display = "block";
+        document.getElementById("done-adding").style.display = "block";
         document.getElementById("done-adding").disabled = false;
       }
     }
