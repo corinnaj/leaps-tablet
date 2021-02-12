@@ -1,6 +1,5 @@
 let condition = new URL(window.location.href).searchParams.get("condition");
 if (condition == null) condition = 0;
-const first = [490, 500, 500];
 const endAreaStart = [250, 550, 800];
 const endAreaEnd = [100, 650, 950];
 
@@ -10,7 +9,7 @@ const condEndAreaEnd = endAreaEnd[condition]
 const color1 = { red: 255, green: 0, blue: 0 };
 const color2 = { red: 255, green: 255, blue: 0 };
 const color3 = { red: 19, green: 233, blue: 19 };
-let selected = first[condition];
+let selected = 500;
 let mySquares = [];
 let interval;
 
